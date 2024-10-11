@@ -69,7 +69,7 @@ export const prodiaRouter = createTRPCRouter({
           ...(!!input.upscale && { upscale: input.upscale }),
         };
       }
-      let j: JobResponse = await createGenerationJob(input.prodiaKey, input.prodiaGen === 'sdxl', jobRequest);
+      let j: JobResponse = await createGenerationJob(input.prodiaKey, jobRequest);
 
       // poll the job status until it's done
       let sleepDelay = 3000;
@@ -179,9 +179,10 @@ export interface JobResponse {
 }
 
 
-async function createGenerationJob<TJobRequest extends JobRequestBase>(apiKey: string | undefined, isGenSDXL: boolean, jobRequest: TJobRequest): Promise<JobResponse> {
-  const { headers, url } = prodiaAccess(apiKey, isGenSDXL ? '/v1/sdxl/generate' : '/v1/sd/generate');
-  return await fetchJsonOrTRPCError<JobResponse, TJobRequest>(url, 'POST', headers, jobRequest, 'Prodia Job Create');
+async function createGenerationJob<TJobRequest extends JobRequestBase>(apiKey: string | undefined, jobRequest: TJobRequest): Promise<JobResponse> {
+  const apiPath = queryParameters('/generate', jobRequest);
+  const { headers, url } = prodiaAccess(apiKey, apiPath);
+  return await fetchJsonOrTRPCError<JobResponse>(url, 'GET', headers, undefined, 'Prodia Job Create');
 }
 
 async function getJobStatus(apiKey: string | undefined, jobId: string): Promise<JobResponse> {
@@ -206,4 +207,11 @@ function prodiaAccess(_prodiaKey: string | undefined, apiPath: string): { header
     },
     url: prodiaHost + apiPath,
   };
+}
+
+function queryParameters<TJobRequest extends JobRequestBase>(apiPath: string, jobRequest: TJobRequest): string {
+  const params = Object.entries(jobRequest)
+    .filter(([key, value]) => value !== undefined && key !== 'model' && key !== 'image')
+    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`);
+  return params.length > 0 ? `${apiPath}?${params.join('&')}` : apiPath;
 }
