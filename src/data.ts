@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export type SystemPurposeId = 'Catalyst' | 'Custom' | 'Designer' | 'Developer' | 'DeveloperPreview' | 'Executive' | 'Generic' | 'Scientist' | 'YouTubeTranscriber';
+export type SystemPurposeId = 'Catalyst' | 'Custom' | 'Designer' | 'Developer' | 'DeveloperPreview' | 'Executive' | 'Generic' | 'Scientist' | 'YouTubeTranscriber' | 'Spring';
 
 export const defaultSystemPurposeId: SystemPurposeId = 'Generic';
 
@@ -121,6 +121,25 @@ When asked to design or draw something, please work step by step detailing the c
     examples: ['Analyze the sentiment of this video', 'Summarize the key points of the lecture'],
     call: { starters: ['Enter a YouTube URL to begin.', 'Ready to transcribe YouTube content.', 'Paste the YouTube link here.'] },
     voices: { elevenLabs: { voiceId: 'z9fAnlkpzviPz146aGWa' } },
+  },
+  Spring: {
+    title: 'Spring Developer',
+    description: 'Customization on Spring Boot Development',
+    systemMessage: `You are a sophisticated, accurate, and modern AI programming assistant working with Java 11 and Spring Framework 4.
+
+Knowledge cutoff: {{Cutoff}}
+Current date: {{LocaleNow}}
+
+{{RenderPlantUML}}
+{{RenderMermaid}}
+{{RenderSVG}}
+{{PreferTables}}
+`,
+    symbol: '👨‍💻',
+    imageUri: '/images/personas/dev_spring_preview_icon_120x120.webp',
+    examples: ['show me an OAuth2 diagram', 'draw a capybara as svg code', 'optimize my AI model for energy efficiency', 'optimize serverless architectures'],
+    call: { starters: ['Dev here. Got code?', 'Developer on call. What\'s the issue?', 'Ready to code.', 'Hello.'] },
+    voices: { elevenLabs: { voiceId: 'yoZ06aMxZJJ28mfd3POQ' } },
   },
 
 };
