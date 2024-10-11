@@ -11,6 +11,7 @@ export async function prodiaGenerateImages(imageText: string, count: number) {
     prodiaAspectRatio: aspectRatio, prodiaUpscale: upscale,
     prodiaResolution: resolution,
     prodiaSeed: seed,
+    prodiaTimeout: timeout,
   } = useProdiaStore.getState();
 
   // Run the image generation 'count' times in parallel
@@ -30,6 +31,7 @@ export async function prodiaGenerateImages(imageText: string, count: number) {
         ...(upscale && { upscale }),
         ...(!!resolution && { resolution }),
         ...(!!seed && { seed }),
+        ...(!!timeout && { timeout }),
       });
 
       if (images.length !== 1)

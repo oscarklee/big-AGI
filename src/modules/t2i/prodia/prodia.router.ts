@@ -21,6 +21,7 @@ const createImageInputSchema = z.object({
   upscale: z.boolean().optional(),
   resolution: z.string().optional(),
   seed: z.number().optional(),
+  timeout: z.number().optional(),
 });
 
 const modelsInputSchema = z.object({
@@ -37,7 +38,7 @@ export const prodiaRouter = createTRPCRouter({
     .query(async ({ input }) => {
 
       // timeout, in seconds
-      const timeout = 20;
+      const timeout = input.timeout || 20;
       const tStart = Date.now();
 
       // crate the job, getting back a job ID

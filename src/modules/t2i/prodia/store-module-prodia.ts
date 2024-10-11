@@ -41,6 +41,9 @@ interface ModuleProdiaStore {
   prodiaSeed: number | null;
   setProdiaSeed: (seed: string) => void;
 
+  prodiaTimeout: number;
+  setProdiaTimeout: (timeout: number) => void;
+
 }
 
 export const useProdiaStore = create<ModuleProdiaStore>()(
@@ -78,6 +81,9 @@ export const useProdiaStore = create<ModuleProdiaStore>()(
 
       prodiaSeed: null,
       setProdiaSeed: (prodiaSeed: string) => set({ prodiaSeed: (prodiaSeed === '' || prodiaSeed === '-1') ? null : parseInt(prodiaSeed) ?? null }),
+
+      prodiaTimeout: 20,
+      setProdiaTimeout: (prodiaTimeout: number) => set({ prodiaTimeout }),
 
     }),
     {

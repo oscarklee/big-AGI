@@ -31,7 +31,7 @@ export function ProdiaSettings(props: { noSkipKey?: boolean }) {
 
   // external state
   const backendHasProdia = getBackendCapabilities().hasImagingProdia;
-  const { apiKey, setApiKey, modelId, setModelId, modelGen, setModelGen, negativePrompt, setNegativePrompt, steps, setSteps, cfgScale, setCfgScale, prodiaAspectRatio, setProdiaAspectRatio, upscale, setUpscale, prodiaResolution, setProdiaResolution, seed, setSeed } = useProdiaStore(state => ({
+  const { apiKey, setApiKey, modelId, setModelId, modelGen, setModelGen, negativePrompt, setNegativePrompt, steps, setSteps, cfgScale, setCfgScale, prodiaAspectRatio, setProdiaAspectRatio, upscale, setUpscale, prodiaResolution, setProdiaResolution, seed, setSeed, timeout, setProdiaTimeout } = useProdiaStore(state => ({
     apiKey: state.prodiaApiKey, setApiKey: state.setProdiaApiKey,
     modelId: state.prodiaModelId, setModelId: state.setProdiaModelId,
     modelGen: state.prodiaModelGen, setModelGen: state.setProdiaModelGen,
@@ -42,6 +42,7 @@ export function ProdiaSettings(props: { noSkipKey?: boolean }) {
     upscale: state.prodiaUpscale, setUpscale: state.setProdiaUpscale,
     prodiaResolution: state.prodiaResolution, setProdiaResolution: state.setProdiaResolution,
     seed: state.prodiaSeed, setSeed: state.setProdiaSeed,
+    timeout: state.prodiaTimeout, setProdiaTimeout: state.setProdiaTimeout,
   }), shallow);
 
 
@@ -194,6 +195,24 @@ export function ProdiaSettings(props: { noSkipKey?: boolean }) {
         aria-label='Image Generation Seed'
         variant='outlined' placeholder='Random'
         value={seed || ''} onChange={(e) => setSeed(e.target.value || '')}
+        slotProps={{
+          input: {
+            type: 'number',
+            sx: { width: '100%' },
+          },
+        }}
+        sx={{ width: '100%' }}
+      />
+    </FormControl>}
+
+    {advanced.on && <FormControl orientation='horizontal' sx={{ justifyContent: 'space-between' }}>
+      <FormLabelStart title='Timeout (sec)'
+                      description={timeout ? 'Custom' : ''}
+                      tooltip='Set max time to wait for image generation.' />
+      <Input
+        aria-label='Image Generation Timeout'
+        variant='outlined' placeholder='20 Sec.'
+        value={timeout || ''} onChange={(e) => setProdiaTimeout(e.target.valueAsNumber)}
         slotProps={{
           input: {
             type: 'number',
